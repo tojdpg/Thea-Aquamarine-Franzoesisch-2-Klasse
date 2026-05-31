@@ -529,6 +529,19 @@ textarea:focus {
   margin: 0.35rem 0 0;
 }
 
+.storage-diagnostic {
+  background: #fbfdff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 0.85rem 0;
+  padding: 0.75rem;
+}
+
+.storage-diagnostic p {
+  margin: 0.25rem 0;
+  overflow-wrap: anywhere;
+}
+
 .run-details {
   border-top: 1px solid var(--line);
   margin-top: 0.85rem;

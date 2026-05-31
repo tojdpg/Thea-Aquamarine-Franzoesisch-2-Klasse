@@ -196,6 +196,30 @@ function htmlEscape(value) {
     .replaceAll('"', "&quot;");
 }
 
+function storageDiagnostic() {
+  try {
+    const keys = Array.from({ length: localStorage.length }, (_, index) => localStorage.key(index))
+      .filter(Boolean)
+      .sort();
+
+    return {
+      available: true,
+      keys,
+      hasHistory: Boolean(localStorage.getItem(HISTORY_KEY)),
+      hasProgress: Boolean(localStorage.getItem(STORAGE_KEY)),
+      origin: window.location.origin
+    };
+  } catch (error) {
+    return {
+      available: false,
+      keys: [],
+      hasHistory: false,
+      hasProgress: false,
+      origin: window.location.origin
+    };
+  }
+}
+
 function renderSummary(history) {
   const latest = history[0];
   const best = history.reduce((max, item) => Math.max(max, item.percent || 0), 0);
@@ -212,10 +236,22 @@ function renderSummary(history) {
 
 function renderHistory(history) {
   if (history.length === 0) {
+    const diagnostic = storageDiagnostic();
+    const storageText = diagnostic.available
+      ? "Browser-Speicher ist erreichbar, aber für diese Adresse wurde kein alter Thea-Stand gefunden."
+      : "Browser-Speicher ist für diese Seite nicht erreichbar.";
+
     historyList.innerHTML = `
       <section class="empty-state">
         <h1>Noch kein gespeicherter Durchgang</h1>
-        <p>Wenn Thea eine Mission mit Vérifier prüft, erscheint sie hier.</p>
+        <p>${storageText}</p>
+        <div class="storage-diagnostic">
+          <p><strong>Geprüfte Adresse:</strong> ${htmlEscape(diagnostic.origin)}</p>
+          <p><strong>Verlauf gefunden:</strong> ${diagnostic.hasHistory ? "ja" : "nein"}</p>
+          <p><strong>Alter Aufgabenstand gefunden:</strong> ${diagnostic.hasProgress ? "ja" : "nein"}</p>
+          <p><strong>Speicher-Schlüssel auf dieser Adresse:</strong> ${diagnostic.keys.length ? htmlEscape(diagnostic.keys.join(", ")) : "keine"}</p>
+        </div>
+        <p>Wenn Theas erster Durchgang auf einem anderen Gerät, in einem anderen Browser oder unter einer anderen Adresse gemacht wurde, kann diese Seite ihn nicht automatisch sehen. Dann brauchen wir einen Screenshot oder PDF zum Nachtragen.</p>
       </section>
     `;
     return;
