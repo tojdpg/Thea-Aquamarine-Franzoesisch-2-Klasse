@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">Aquamarinfarbene Muschel</title>
+  <desc id="desc">Eine freundliche aquamarinfarbene Muschel mit einem kleinen französischen Heft.</desc>
+  <rect width="240" height="240" rx="26" fill="#fffdf6"/>
+  <path d="M38 176c24-48 51-82 82-102 31 20 58 54 82 102-39 28-125 28-164 0z" fill="#41b8b3"/>
+  <path d="M120 74v119M81 103c12 31 22 61 27 90M159 103c-12 31-22 61-27 90M56 143c26 19 46 36 59 51M184 143c-26 19-46 36-59 51" fill="none" stroke="#17212b" stroke-width="7" stroke-linecap="round"/>
+  <path d="M38 176c24-48 51-82 82-102 31 20 58 54 82 102-39 28-125 28-164 0z" fill="none" stroke="#17212b" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M87 175h66c8 0 14 6 14 14v25H73v-25c0-8 6-14 14-14z" fill="#f2bd42" stroke="#17212b" stroke-width="7" stroke-linejoin="round"/>
+  <text x="92" y="205" fill="#17212b" font-family="Avenir Next, Arial, sans-serif" font-size="25" font-weight="800">FR</text>
+  <circle cx="96" cy="139" r="7" fill="#17212b"/>
+  <circle cx="144" cy="139" r="7" fill="#17212b"/>
+  <path d="M105 157c10 9 21 9 31 0" fill="none" stroke="#17212b" stroke-width="6" stroke-linecap="round"/>
+</svg>

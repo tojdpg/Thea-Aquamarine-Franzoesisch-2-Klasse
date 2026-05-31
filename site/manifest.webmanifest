@@ -1,0 +1,17 @@
+{
+  "name": "Thea Aquamarine - Mission de français",
+  "short_name": "Thea Français",
+  "description": "Interaktive Französisch-Übungen für Thea Aquamarine.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7fbfd",
+  "theme_color": "#128283",
+  "icons": [
+    {
+      "src": "assets/aquamarine-shell.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
