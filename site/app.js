@@ -329,6 +329,64 @@ function saveHistorySnapshot() {
   saveHistory(history);
 }
 
+function exportStateBundle() {
+  saveState();
+  if (collectHistoryEntry().workedMissions > 0) {
+    saveHistorySnapshot();
+  }
+
+  const bundle = {
+    app: "thea-french-2c",
+    exportedAt: new Date().toISOString(),
+    origin: window.location.origin,
+    progress: localStorage.getItem(STORAGE_KEY),
+    history: localStorage.getItem(HISTORY_KEY),
+    sessionId: localStorage.getItem(SESSION_KEY)
+  };
+  return btoa(unescape(encodeURIComponent(JSON.stringify(bundle))));
+}
+
+async function copyStateBundle() {
+  const code = exportStateBundle();
+
+  try {
+    await navigator.clipboard.writeText(code);
+    showToast("Stand-Code kopiert.");
+  } catch (error) {
+    window.prompt("Stand-Code kopieren:", code);
+  }
+}
+
+function importStateBundle() {
+  const code = window.prompt("Stand-Code einfügen:");
+  if (!code) {
+    return;
+  }
+
+  try {
+    const bundle = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+
+    if (bundle.app !== "thea-french-2c") {
+      throw new Error("wrong app");
+    }
+
+    if (bundle.progress) {
+      localStorage.setItem(STORAGE_KEY, bundle.progress);
+    }
+    if (bundle.history) {
+      localStorage.setItem(HISTORY_KEY, bundle.history);
+    }
+    if (bundle.sessionId) {
+      localStorage.setItem(SESSION_KEY, bundle.sessionId);
+    }
+
+    showToast("Stand importiert.");
+    window.setTimeout(() => window.location.reload(), 500);
+  } catch (error) {
+    showToast("Stand-Code konnte nicht gelesen werden.");
+  }
+}
+
 function getAudioContext() {
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   if (!AudioContextClass) {
@@ -500,6 +558,8 @@ document.querySelectorAll(".choice-row button").forEach((button) => {
 });
 
 document.querySelector("#checkWritingBtn").addEventListener("click", checkWriting);
+document.querySelector("#exportStateBtn")?.addEventListener("click", copyStateBundle);
+document.querySelector("#importStateBtn")?.addEventListener("click", importStateBundle);
 
 document.querySelector("#resetBtn").addEventListener("click", () => {
   document.querySelectorAll("input, textarea").forEach((field) => {

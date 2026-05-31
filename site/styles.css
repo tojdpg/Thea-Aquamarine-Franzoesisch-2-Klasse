@@ -152,6 +152,10 @@ a {
   text-decoration: none;
 }
 
+.transfer-button {
+  color: var(--ink);
+}
+
 .icon-button {
   align-items: center;
   background: var(--surface);
