@@ -152,8 +152,10 @@ a {
   text-decoration: none;
 }
 
-.transfer-button {
-  color: var(--ink);
+.top-pdf-run-button {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
 }
 
 .icon-button {
