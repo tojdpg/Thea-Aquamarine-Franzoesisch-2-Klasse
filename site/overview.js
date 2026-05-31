@@ -70,6 +70,19 @@ function renderHistory(history) {
         ${mistake.expected ? ` · Erwartet: ${htmlEscape(mistake.expected)}` : ""}
       </li>
     `).join("");
+    const answers = (entry.answers || []).map((group) => `
+      <section class="answer-group">
+        <h3>${htmlEscape(group.title)}</h3>
+        <dl>
+          ${group.items.map(([prompt, answer]) => `
+            <div>
+              <dt>${htmlEscape(prompt)}</dt>
+              <dd>${htmlEscape(answer).replaceAll("\n", "<br>")}</dd>
+            </div>
+          `).join("")}
+        </dl>
+      </section>
+    `).join("");
 
     return `
       <article class="history-card">
@@ -81,13 +94,25 @@ function renderHistory(history) {
           </div>
           <span class="status-badge ${badgeClass}">${badgeText}</span>
         </header>
-        <div class="mission-result-list">${missions}</div>
-        ${mistakes ? `
-          <div class="mistake-list">
-            <h3>Noch anschauen</h3>
-            <ul>${mistakes}</ul>
-          </div>
-        ` : ""}
+        <details class="run-details">
+          <summary>
+            <span>Bereiche anzeigen</span>
+            <small>${entry.workedMissions || 0} Bereiche gemacht</small>
+          </summary>
+          <div class="mission-result-list">${missions}</div>
+          ${answers ? `
+            <details class="answer-review">
+              <summary>Ausgefüllte Antworten anzeigen</summary>
+              ${answers}
+            </details>
+          ` : ""}
+          ${mistakes ? `
+            <div class="mistake-list">
+              <h3>Noch anschauen</h3>
+              <ul>${mistakes}</ul>
+            </div>
+          ` : ""}
+        </details>
       </article>
     `;
   }).join("");

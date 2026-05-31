@@ -523,6 +523,84 @@ textarea:focus {
   color: #69450a;
 }
 
+.run-details {
+  border-top: 1px solid var(--line);
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+}
+
+.run-details > summary {
+  align-items: center;
+  background: #eaf7f7;
+  border: 1px solid #b7dede;
+  border-radius: 8px;
+  color: var(--primary-strong);
+  cursor: pointer;
+  display: flex;
+  font-weight: 800;
+  gap: 0.75rem;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0.65rem 0.8rem;
+}
+
+.run-details > summary small {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.answer-review {
+  border-top: 1px solid var(--line);
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+}
+
+.answer-review summary {
+  color: var(--primary-strong);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.answer-group {
+  margin-top: 0.8rem;
+}
+
+.answer-group h3 {
+  font-size: 1rem;
+  margin: 0 0 0.45rem;
+}
+
+.answer-group dl {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.answer-group dl div {
+  background: #fbfdff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.45rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  padding: 0.55rem 0.65rem;
+}
+
+.answer-group dt,
+.answer-group dd {
+  margin: 0;
+}
+
+.answer-group dt {
+  color: var(--muted);
+}
+
+.answer-group dd {
+  color: var(--ink);
+  font-weight: 750;
+}
+
 .mission-result-list {
   display: grid;
   gap: 0.5rem;
@@ -584,6 +662,7 @@ textarea:focus {
   .writing-grid,
   .summary-grid,
   .history-card header,
+  .answer-group dl div,
   .mission-result {
     grid-template-columns: 1fr;
   }

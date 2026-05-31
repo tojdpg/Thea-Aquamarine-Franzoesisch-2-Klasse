@@ -221,6 +221,22 @@ function getPrompt(task) {
   return cleanPrompt(promptNode ? promptNode.textContent : "");
 }
 
+function answerSummary(task) {
+  const answer = getValue(task).trim();
+  const touched = task.classList.contains("is-correct") ||
+    task.classList.contains("is-wrong") ||
+    Boolean(answer);
+
+  if (!touched) {
+    return null;
+  }
+
+  return {
+    prompt: getPrompt(task),
+    answer
+  };
+}
+
 function missionSummary(section) {
   const title = section.querySelector("h2")?.textContent.trim() || section.id;
   const tasks = Array.from(section.querySelectorAll("[data-task]"));
@@ -234,6 +250,10 @@ function missionSummary(section) {
       total: 1,
       correct: isCorrect ? 1 : 0,
       touched: touched ? 1 : 0,
+      answers: touched ? [{
+        prompt: "Mon mini-texte",
+        answer: writingText.value.trim()
+      }] : [],
       mistakes: isWrong ? [{
         prompt: "Mon mini-texte",
         answer: writingText.value.trim(),
@@ -260,7 +280,15 @@ function missionSummary(section) {
     }
   });
 
-  return { id: section.id, title, total: tasks.length, correct, touched, mistakes };
+  return {
+    id: section.id,
+    title,
+    total: tasks.length,
+    correct,
+    touched,
+    answers: tasks.map(answerSummary).filter(Boolean),
+    mistakes
+  };
 }
 
 function collectHistoryEntry() {
@@ -278,6 +306,12 @@ function collectHistoryEntry() {
     completedMissions: missions.filter((mission) => mission.total > 0 && mission.correct === mission.total).length,
     workedMissions: missions.filter((mission) => mission.touched > 0).length,
     missions,
+    answers: missions
+      .filter((mission) => mission.answers?.length)
+      .map((mission) => ({
+        title: mission.title,
+        items: mission.answers.map((answer) => [answer.prompt, answer.answer])
+      })),
     mistakes: missions.flatMap((mission) => mission.mistakes.map((mistake) => ({ mission: mission.title, ...mistake })))
   };
 }
@@ -493,3 +527,6 @@ document.querySelector("#resetBtn").addEventListener("click", () => {
 
 restoreState();
 updateScore();
+if (collectHistoryEntry().workedMissions > 0) {
+  saveHistorySnapshot();
+}
