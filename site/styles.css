@@ -523,6 +523,12 @@ textarea:focus {
   color: #69450a;
 }
 
+.history-note {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0.35rem 0 0;
+}
+
 .run-details {
   border-top: 1px solid var(--line);
   margin-top: 0.85rem;
