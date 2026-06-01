@@ -1,5 +1,6 @@
 const HISTORY_KEY = "thea-french-2c-history-v1";
 const STORAGE_KEY = "thea-french-2c-progress-v1";
+const ROUND2_STORAGE_KEY = "thea-french-2c-round2-progress-v1";
 const historyList = document.querySelector("#historyList");
 const summaryGrid = document.querySelector("#summaryGrid");
 
@@ -32,6 +33,54 @@ const FIELD_INDEX_BY_TASK = new Map([
   [25, 5], [26, 6], [27, 7], [28, 8]
 ]);
 
+const ROUND2_MISSIONS = [
+  { id: "petits-mots", title: "Les petits mots", start: 0, end: 4 },
+  { id: "couleurs", title: "Les couleurs", start: 4, end: 8 },
+  { id: "nombres", title: "Les nombres", start: 8, end: 13 },
+  { id: "classe", title: "Dans la classe", start: 13, end: 17 },
+  { id: "phrases", title: "Petites phrases", start: 17, end: 21 },
+  { id: "sons", title: "Les sons secrets", start: 21, end: 25 },
+  { id: "lecture", title: "Petite lecture", start: 25, end: 28 },
+  { id: "ecriture", title: "Mon mini-texte", start: 28, end: 29 }
+];
+
+const ROUND2_TASK_PROMPTS = [
+  "bonsoir", "pardon", "oui", "non",
+  "orange", "lila", "weiß", "schwarz",
+  "6 =", "7 =", "8 =", "9 =", "10 =",
+  "______ règle", "______ stylo", "______ table", "______ sac",
+  "______ Thea.", "______ sept ans.", "______ les dauphins.", "______ à l'école.",
+  "rouge", "noir", "enfant", "lapin",
+  "De quelle couleur est le sac ?",
+  "Qu'est-ce qu'il y a dans le sac ?",
+  "Avec qui Thea joue-t-elle ?",
+  "Mon mini-texte"
+];
+
+const ROUND2_FIELD_INDEX_BY_TASK = new Map([
+  [8, 0], [9, 1], [10, 2], [11, 3], [12, 4],
+  [25, 5], [26, 6], [27, 7], [28, 8]
+]);
+
+const RUN_RECOVERY_CONFIGS = [
+  {
+    storageKey: STORAGE_KEY,
+    sessionId: "recovered-thea-current-progress",
+    title: "Thea Aquamarine - Mission de français",
+    missions: MISSIONS,
+    taskPrompts: TASK_PROMPTS,
+    fieldIndexByTask: FIELD_INDEX_BY_TASK
+  },
+  {
+    storageKey: ROUND2_STORAGE_KEY,
+    sessionId: "recovered-thea-round2-current-progress",
+    title: "Thea Aquamarine - Mission de français 2",
+    missions: ROUND2_MISSIONS,
+    taskPrompts: ROUND2_TASK_PROMPTS,
+    fieldIndexByTask: ROUND2_FIELD_INDEX_BY_TASK
+  }
+];
+
 function loadHistory() {
   try {
     return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
@@ -48,17 +97,18 @@ function saveHistory(history) {
   }
 }
 
-function loadProgressState() {
+function loadProgressState(storageKey) {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    return JSON.parse(localStorage.getItem(storageKey) || "null");
   } catch (error) {
     return null;
   }
 }
 
-function taskAnswerFromState(state, index) {
-  if (index === 28) {
-    return state.fields?.[8] || "";
+function taskAnswerFromState(state, index, config) {
+  const writingIndex = config.taskPrompts.length - 1;
+  if (index === writingIndex) {
+    return state.fields?.[config.fieldIndexByTask.get(index)] || "";
   }
 
   const task = state.tasks?.[index] || {};
@@ -66,7 +116,7 @@ function taskAnswerFromState(state, index) {
     return task.selected;
   }
 
-  const fieldIndex = FIELD_INDEX_BY_TASK.get(index);
+  const fieldIndex = config.fieldIndexByTask.get(index);
   if (fieldIndex !== undefined) {
     return state.fields?.[fieldIndex] || "";
   }
@@ -74,50 +124,54 @@ function taskAnswerFromState(state, index) {
   return "";
 }
 
-function taskTouchedFromState(state, index) {
-  if (index === 28) {
-    return Boolean(state.fields?.[8]?.trim() || state.writingOk || state.writingTextCorrect || state.writingTextWrong);
+function taskTouchedFromState(state, index, config) {
+  const writingIndex = config.taskPrompts.length - 1;
+  if (index === writingIndex) {
+    const fieldIndex = config.fieldIndexByTask.get(index);
+    return Boolean(state.fields?.[fieldIndex]?.trim() || state.writingOk || state.writingTextCorrect || state.writingTextWrong);
   }
 
   const task = state.tasks?.[index] || {};
-  return Boolean(task.selected || task.isCorrect || task.isWrong || taskAnswerFromState(state, index).trim());
+  return Boolean(task.selected || task.isCorrect || task.isWrong || taskAnswerFromState(state, index, config).trim());
 }
 
-function taskCorrectFromState(state, index) {
-  if (index === 28) {
+function taskCorrectFromState(state, index, config) {
+  const writingIndex = config.taskPrompts.length - 1;
+  if (index === writingIndex) {
     return Boolean(state.writingOk || state.writingTextCorrect);
   }
 
   return Boolean(state.tasks?.[index]?.isCorrect);
 }
 
-function entryFromProgressState(state) {
+function entryFromProgressState(state, config) {
   if (!state?.tasks?.length && !state?.fields?.length) {
     return null;
   }
 
-  const total = 29;
-  const score = Array.from({ length: 29 }, (_, index) => index)
-    .filter((index) => taskCorrectFromState(state, index)).length;
-  const missions = MISSIONS.map((mission) => {
+  const total = config.taskPrompts.length;
+  const writingIndex = total - 1;
+  const score = Array.from({ length: total }, (_, index) => index)
+    .filter((index) => taskCorrectFromState(state, index, config)).length;
+  const missions = config.missions.map((mission) => {
     const indexes = Array.from(
       { length: mission.end - mission.start },
       (_, offset) => mission.start + offset
     );
-    const correct = indexes.filter((index) => taskCorrectFromState(state, index)).length;
-    const touched = indexes.filter((index) => taskTouchedFromState(state, index)).length;
+    const correct = indexes.filter((index) => taskCorrectFromState(state, index, config)).length;
+    const touched = indexes.filter((index) => taskTouchedFromState(state, index, config)).length;
     const answers = indexes
-      .filter((index) => taskTouchedFromState(state, index))
+      .filter((index) => taskTouchedFromState(state, index, config))
       .map((index) => ({
-        prompt: TASK_PROMPTS[index],
-        answer: taskAnswerFromState(state, index)
+        prompt: config.taskPrompts[index],
+        answer: taskAnswerFromState(state, index, config)
       }));
     const mistakes = indexes
-      .filter((index) => taskTouchedFromState(state, index) && !taskCorrectFromState(state, index))
+      .filter((index) => taskTouchedFromState(state, index, config) && !taskCorrectFromState(state, index, config))
       .map((index) => ({
-        prompt: TASK_PROMPTS[index],
-        answer: taskAnswerFromState(state, index),
-        expected: index === 28 ? "3 petites phrases" : ""
+        prompt: config.taskPrompts[index],
+        answer: taskAnswerFromState(state, index, config),
+        expected: index === writingIndex ? "3 petites phrases" : ""
       }));
 
     return {
@@ -137,8 +191,8 @@ function entryFromProgressState(state) {
   }
 
   return {
-    sessionId: "recovered-thea-current-progress",
-    title: "Thea Aquamarine - Mission de français",
+    sessionId: config.sessionId,
+    title: config.title,
     createdAt: state.savedAt || new Date().toISOString(),
     updatedAt: state.savedAt || new Date().toISOString(),
     score,
@@ -164,14 +218,16 @@ function entryFromProgressState(state) {
 }
 
 function mergeProgressIntoHistory(history) {
-  const recoveredEntry = entryFromProgressState(loadProgressState());
+  const recoveredEntries = RUN_RECOVERY_CONFIGS
+    .map((config) => entryFromProgressState(loadProgressState(config.storageKey), config))
+    .filter(Boolean);
 
-  if (!recoveredEntry) {
+  if (recoveredEntries.length === 0) {
     return history;
   }
 
   const entriesBySession = new Map();
-  [...history, recoveredEntry].forEach((entry) => {
+  [...history, ...recoveredEntries].forEach((entry) => {
     entriesBySession.set(entry.sessionId || `${entry.title}-${entry.updatedAt}`, entry);
   });
 
@@ -202,11 +258,16 @@ function storageDiagnostic() {
       .filter(Boolean)
       .sort();
 
+    const progressKeys = RUN_RECOVERY_CONFIGS
+      .map((config) => config.storageKey)
+      .filter((key) => Boolean(localStorage.getItem(key)));
+
     return {
       available: true,
       keys,
       hasHistory: Boolean(localStorage.getItem(HISTORY_KEY)),
-      hasProgress: Boolean(localStorage.getItem(STORAGE_KEY)),
+      hasProgress: progressKeys.length > 0,
+      progressKeys,
       origin: window.location.origin
     };
   } catch (error) {
@@ -215,6 +276,7 @@ function storageDiagnostic() {
       keys: [],
       hasHistory: false,
       hasProgress: false,
+      progressKeys: [],
       origin: window.location.origin
     };
   }
@@ -248,7 +310,7 @@ function renderHistory(history) {
         <div class="storage-diagnostic">
           <p><strong>Geprüfte Adresse:</strong> ${htmlEscape(diagnostic.origin)}</p>
           <p><strong>Verlauf gefunden:</strong> ${diagnostic.hasHistory ? "ja" : "nein"}</p>
-          <p><strong>Alter Aufgabenstand gefunden:</strong> ${diagnostic.hasProgress ? "ja" : "nein"}</p>
+          <p><strong>Aufgabenstand gefunden:</strong> ${diagnostic.hasProgress ? `ja (${htmlEscape(diagnostic.progressKeys.join(", "))})` : "nein"}</p>
           <p><strong>Speicher-Schlüssel auf dieser Adresse:</strong> ${diagnostic.keys.length ? htmlEscape(diagnostic.keys.join(", ")) : "keine"}</p>
         </div>
         <p>Wenn Theas erster Durchgang auf einem anderen Gerät, in einem anderen Browser oder unter einer anderen Adresse gemacht wurde, kann diese Seite ihn nicht automatisch sehen. Dann brauchen wir einen Screenshot oder PDF zum Nachtragen.</p>
@@ -297,7 +359,7 @@ function renderHistory(history) {
           <div>
             <p class="eyebrow">${formatDate(entry.updatedAt)}</p>
             <h2>${htmlEscape(entry.title)}</h2>
-            <p>Score: ${entry.score}/${entry.total} · ${entry.percent}% · Missionen: ${entry.completedMissions}/8 komplett</p>
+            <p>Score: ${entry.score}/${entry.total} · ${entry.percent}% · Missionen: ${entry.completedMissions}/${entry.missions?.length || 8} komplett</p>
             ${entry.note ? `<p class="history-note">${htmlEscape(entry.note)}</p>` : ""}
           </div>
           <span class="status-badge ${badgeClass}">${badgeText}</span>
