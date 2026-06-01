@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thea Aquamarine - Mission de français</title>
+    <meta name="description" content="Interaktive Französisch-Übungen für Thea Aquamarine, Klasse 2c.">
+    <meta name="theme-color" content="#128283">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Thea Français">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/icons/favicon-32.png?v=20260531-icon" type="image/png" sizes="32x32">
+    <link rel="icon" href="assets/icons/thea-icon-192.png?v=20260531-icon" type="image/png" sizes="192x192">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=20260531-icon" sizes="180x180">
+    <link rel="stylesheet" href="styles.css?v=20260601-round2">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Aller aux exercices</a>
+
+    <header class="topbar">
+      <div class="brand">
+        <img src="assets/aquamarine-shell.svg" width="56" height="56" alt="Muschel mit französischem Heft">
+        <div>
+          <p class="eyebrow">Judith Kerr Grundschule · 2c · Deutsch-Track</p>
+          <p class="brand-title">Thea Aquamarine - Mission de français</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <div class="score-pill" aria-live="polite">
+          <span>Score</span>
+          <strong><span id="score">0</span>/<span id="total">0</span></strong>
+        </div>
+        <div class="save-status" id="saveStatus" aria-live="polite">Automatisch gespeichert</div>
+        <a class="nav-link" href="uebersicht.html">Übersicht</a>
+        <a class="nav-link top-pdf-run-button" href="durchlauf-2.html">Durchlauf 2</a>
+        <button class="icon-button" id="resetBtn" type="button" aria-label="Alles neu starten">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4 12a8 8 0 1 0 2.34-5.66"/>
+            <path d="M4 4v6h6"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="intro-band" aria-labelledby="intro-title">
+        <div class="intro-copy">
+          <p class="eyebrow">Tour d'entraînement</p>
+          <h1 id="intro-title">Thea et la chasse aux mots français</h1>
+          <p>
+            La petite coquille a perdu ses mots français. Retrouve les couleurs,
+            les nombres, les petits mots et les phrases.
+          </p>
+        </div>
+
+        <div class="mission-meter" aria-label="Progression">
+          <div>
+            <span>Missions réussies</span>
+            <strong id="progressLabel">0%</strong>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <p id="rankLabel">Niveau actuel : débutante courageuse</p>
+        </div>
+      </section>
+
+      <nav class="mission-nav" aria-label="Missions">
+        <button type="button" data-jump="#bonjour">Bonjour</button>
+        <button type="button" data-jump="#couleurs">Couleurs</button>
+        <button type="button" data-jump="#nombres">Nombres</button>
+        <button type="button" data-jump="#articles">Un / une</button>
+        <button type="button" data-jump="#phrases">Petites phrases</button>
+        <button type="button" data-jump="#sons">Sons</button>
+        <button type="button" data-jump="#lecture">Lecture</button>
+        <button type="button" data-jump="#ecriture">Écriture</button>
+      </nav>
+
+      <section class="mission-band" id="bonjour" aria-labelledby="bonjour-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mission 1</p>
+          <h2 id="bonjour-title">Bonjour !</h2>
+          <p>Choisis la bonne traduction.</p>
+        </div>
+
+        <div class="exercise-grid compact">
+          <article class="exercise choice-task" data-task data-answer="Hallo">
+            <p><strong>bonjour</strong></p>
+            <div class="choice-row">
+              <button type="button" data-value="Hallo">Hallo</button>
+              <button type="button" data-value="Danke">Danke</button>
+            </div>
+            <small class="feedback" aria-live="polite"></small>
+          </article>
+
+          <article class="exercise choice-task" data-task data-answer="Danke">
+            <p><strong>merci</strong></p>
+            <div class="choice-row">
+              <button type="button" data-value="Tschüss">Tschüss</button>
+              <button type="button" data-value="Danke">Danke</button>
+            </div>
+            <small class="feedback" aria-live="polite"></small>
+          </article>
+
+          <article class="exercise choice-task" data-task data-answer="Tschüss">
+            <p><strong>au revoir</strong></p>
+            <div class="choice-row">
+              <button type="button" data-value="Tschüss">Tschüss</button>
+              <button type="button" data-value="Bitte">Bitte</button>
+            </div>
+            <small class="feedback" aria-live="polite"></small>
+          </article>
+
+          <article class="exercise choice-task" data-task data-answer="Bitte">
+            <p><strong>s'il te plaît</strong></p>
+            <div class="choice-row">
+              <button type="button" data-value="Bitte">Bitte</button>
+              <button type="button" data-value="Hallo">Hallo</button>
+            </div>
+            <small class="feedback" aria-live="polite"></small>
+          </article>
+        </div>
+
+        <button class="check-button" type="button" data-check="#bonjour">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>
+          Vérifier
+        </button>
+      </section>
+
+      <section class="mission-band alt" id="couleurs" aria-labelledby="couleurs-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mission 2</p>
+          <h2 id="couleurs-title">Les couleurs</h2>
+          <p>Choisis la couleur en français.</p>
+        </div>
+
+        <div class="exercise-grid compact">
+          <article class="exercise choice-task" data-task data-answer="bleu">
+            <p>blau</p>
+            <div class="choice-row triple">
+              <button type="button" data-value="rouge">rouge</button>
+              <button type="button" data-value="bleu">bleu</button>
+              <button type="button" data-value="vert">vert</button>
+            </div>
+            <small class="feedback" aria-live="polite"></small>
+          </article>
+
+          <article class="exercise choice-task" data-task data-answer="rouge">
+            <p>rot</p>
+            <div class="choice-row triple">
+              <button type="button" data-value="jaune">jaune</button>
+              <button type="button" data-value="rouge">rouge</button>
+              <button type="button" data-value="rose">rose</button>
+            </div>
+            <small class="feedback" aria-live="polite"></small>
+          </article>
+
+          <article class="exercise choice-task" data-task data-answer="vert">
+            <p>grün</p>
+            <div class="choice-row triple">
+              <button type="button" data-value="vert">vert</button>
+              <button type="button" data-value="bleu">bleu</button>
+              <button type="button" data-value="noir">noir</button>
+            </div>
+            <small class="feedback" aria-live="polite"></small>
+          </article>
+
+          <article class="exercise choice-task" data-task data-answer="jaune">
+            <p>gelb</p>
+            <div class="choice-row triple">
+              <button type="button" data-value="rose">rose</button>
+              <button type="button" data-value="jaune">jaune</button>
+              <button type="button" data-value="blanc">blanc</button>
+            </div>
+            <small class="feedback" aria-live="polite"></small>
+          </article>
+        </div>
+
+        <button class="check-button" type="button" data-check="#couleurs">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>
+          Vérifier
+        </button>
+      </section>
+
+      <section class="mission-band" id="nombres" aria-labelledby="nombres-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mission 3</p>
+          <h2 id="nombres-title">Les nombres</h2>
+          <p>Écris le nombre en français.</p>
+        </div>
+
+        <div class="exercise-grid">
+          <label class="exercise" data-task data-answer="un"><span>1 =</span><input type="text"><small class="feedback" aria-live="polite"></small></label>
+          <label class="exercise" data-task data-answer="deux"><span>2 =</span><input type="text"><small class="feedback" aria-live="polite"></small></label>
+          <label class="exercise" data-task data-answer="trois"><span>3 =</span><input type="text"><small class="feedback" aria-live="polite"></small></label>
+          <label class="exercise" data-task data-answer="quatre"><span>4 =</span><input type="text"><small class="feedback" aria-live="polite"></small></label>
+          <label class="exercise" data-task data-answer="cinq"><span>5 =</span><input type="text"><small class="feedback" aria-live="polite"></small></label>
+        </div>
+
+        <button class="check-button" type="button" data-check="#nombres">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>
+          Vérifier
+        </button>
+      </section>
+
+      <section class="mission-band alt" id="articles" aria-labelledby="articles-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mission 4</p>
+          <h2 id="articles-title">Un ou une ?</h2>
+          <p>Choisis le bon petit mot.</p>
+        </div>
+
+        <div class="exercise-grid compact">
+          <article class="exercise choice-task" data-task data-answer="un"><p>______ livre</p><div class="choice-row"><button type="button" data-value="un">un</button><button type="button" data-value="une">une</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="une"><p>______ trousse</p><div class="choice-row"><button type="button" data-value="un">un</button><button type="button" data-value="une">une</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="un"><p>______ crayon</p><div class="choice-row"><button type="button" data-value="un">un</button><button type="button" data-value="une">une</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="une"><p>______ gomme</p><div class="choice-row"><button type="button" data-value="un">un</button><button type="button" data-value="une">une</button></div><small class="feedback" aria-live="polite"></small></article>
+        </div>
+
+        <button class="check-button" type="button" data-check="#articles">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>
+          Vérifier
+        </button>
+      </section>
+
+      <section class="mission-band" id="phrases" aria-labelledby="phrases-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mission 5</p>
+          <h2 id="phrases-title">Petites phrases</h2>
+          <p>Choisis le bon début.</p>
+        </div>
+
+        <div class="exercise-grid compact">
+          <article class="exercise choice-task" data-task data-answer="Je suis"><p>______ Thea.</p><div class="choice-row triple"><button type="button" data-value="Je suis">Je suis</button><button type="button" data-value="J'ai">J'ai</button><button type="button" data-value="Je vais">Je vais</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="J'ai"><p>______ un cartable.</p><div class="choice-row triple"><button type="button" data-value="Je suis">Je suis</button><button type="button" data-value="J'ai">J'ai</button><button type="button" data-value="Je vais">Je vais</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="Je vais"><p>______ à l'école.</p><div class="choice-row triple"><button type="button" data-value="Je suis">Je suis</button><button type="button" data-value="J'ai">J'ai</button><button type="button" data-value="Je vais">Je vais</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="J'aime"><p>______ le français.</p><div class="choice-row triple"><button type="button" data-value="J'aime">J'aime</button><button type="button" data-value="Je suis">Je suis</button><button type="button" data-value="Je vais">Je vais</button></div><small class="feedback" aria-live="polite"></small></article>
+        </div>
+
+        <button class="check-button" type="button" data-check="#phrases">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>
+          Vérifier
+        </button>
+      </section>
+
+      <section class="mission-band alt" id="sons" aria-labelledby="sons-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mission 6</p>
+          <h2 id="sons-title">Les sons</h2>
+          <p>Choisis le son dans le mot.</p>
+        </div>
+
+        <div class="exercise-grid compact">
+          <article class="exercise choice-task" data-task data-answer="ou"><p>souris</p><div class="choice-row triple"><button type="button" data-value="ou">ou</button><button type="button" data-value="on">on</button><button type="button" data-value="oi">oi</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="oi"><p>trois</p><div class="choice-row triple"><button type="button" data-value="ai">ai</button><button type="button" data-value="oi">oi</button><button type="button" data-value="ou">ou</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="on"><p>bonbon</p><div class="choice-row triple"><button type="button" data-value="on">on</button><button type="button" data-value="ou">ou</button><button type="button" data-value="an">an</button></div><small class="feedback" aria-live="polite"></small></article>
+          <article class="exercise choice-task" data-task data-answer="ai"><p>maison</p><div class="choice-row triple"><button type="button" data-value="oi">oi</button><button type="button" data-value="ai">ai</button><button type="button" data-value="in">in</button></div><small class="feedback" aria-live="polite"></small></article>
+        </div>
+
+        <button class="check-button" type="button" data-check="#sons">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>
+          Vérifier
+        </button>
+      </section>
+
+      <section class="mission-band" id="lecture" aria-labelledby="lecture-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mission 7</p>
+          <h2 id="lecture-title">Petite lecture</h2>
+          <p>Lis le texte et réponds avec quelques mots.</p>
+        </div>
+
+        <blockquote class="reading">
+          Thea a un cartable bleu. Dans le cartable, il y a un livre, une
+          trousse et cinq crayons. Thea aime son cartable.
+        </blockquote>
+
+        <div class="writing-grid">
+          <label class="long-answer" data-task data-keywords="bleu">
+            Quelle est la couleur du cartable ?
+            <textarea rows="2"></textarea>
+            <small class="feedback" aria-live="polite"></small>
+          </label>
+          <label class="long-answer" data-task data-keywords="livre,trousse,crayons">
+            Qu'est-ce qu'il y a dans le cartable ?
+            <textarea rows="2"></textarea>
+            <small class="feedback" aria-live="polite"></small>
+          </label>
+          <label class="long-answer" data-task data-keywords="cinq|5">
+            Combien de crayons y a-t-il ?
+            <textarea rows="2"></textarea>
+            <small class="feedback" aria-live="polite"></small>
+          </label>
+        </div>
+
+        <button class="check-button" type="button" data-check="#lecture">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>
+          Vérifier
+        </button>
+      </section>
+
+      <section class="mission-band alt" id="ecriture" aria-labelledby="ecriture-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mission 8</p>
+          <h2 id="ecriture-title">Mon mini-texte</h2>
+          <p>Écris 3 petites phrases.</p>
+        </div>
+
+        <div class="word-bank" aria-label="Mots utiles">
+          <span>Je m'appelle ...</span>
+          <span>J'ai ...</span>
+          <span>J'aime ...</span>
+          <span>Je vais ...</span>
+        </div>
+
+        <label class="future-writing" data-writing-task>
+          Mon texte
+          <textarea id="writingText" rows="7" aria-describedby="writingHelp"></textarea>
+          <small id="writingHelp" class="feedback" aria-live="polite">La coquille compte 3 phrases.</small>
+        </label>
+
+        <button class="check-button" id="checkWritingBtn" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>
+          Vérifier mon texte
+        </button>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js?v=20260601-round2"></script>
+  </body>
+</html>
