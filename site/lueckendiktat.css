@@ -1,0 +1,48 @@
+.dictation-word-list {
+  align-items: baseline;
+  background: #eaf7f1;
+  border-left: 4px solid var(--mint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.65rem;
+  line-height: 1.8;
+  margin: 0.9rem 0 1.2rem;
+  padding: 0.7rem 1rem;
+}
+
+.dictation-word-list strong {
+  color: var(--primary-strong);
+}
+
+.dictation-sentence {
+  display: block;
+  font-size: 1.17rem;
+  font-weight: 700;
+  line-height: 2.9;
+  margin: 0.45rem 0 0;
+}
+
+.dictation-sentence input {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0.15rem;
+  max-width: 100%;
+  min-height: 44px;
+  text-align: center;
+  vertical-align: baseline;
+  width: 9.5rem;
+}
+
+.dictation-sentence input::placeholder {
+  color: #7c8994;
+  font-weight: 500;
+}
+
+.quiz-question .quiz-check {
+  margin-top: auto;
+}
+
+.quiz-question .quiz-feedback {
+  min-height: 1.5em;
+}

@@ -3,16 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Thea Aquamarine - Quiz des adjectifs</title>
-    <meta name="description" content="Französisches Wörterquiz für Thea mit zehn Adjektiven.">
+    <title>Thea Aquamarine - Lückendiktat</title>
+    <meta name="description" content="Zehn französische Sätze mit Lücken für Thea.">
     <meta name="theme-color" content="#128283">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Thea Français">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="assets/icons/favicon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" sizes="180x180">
-    <link rel="stylesheet" href="styles.css?v=20260927-quiz">
-    <link rel="stylesheet" href="woerter-quiz.css?v=20260927-quiz">
+    <link rel="stylesheet" href="styles.css?v=20260927-dictee">
+    <link rel="stylesheet" href="woerter-quiz.css?v=20260927-dictee">
+    <link rel="stylesheet" href="lueckendiktat.css?v=20260927-dictee">
   </head>
   <body>
     <a class="skip-link" href="#main">Aller au quiz</a>
@@ -32,23 +33,27 @@
         <div class="save-status" id="saveStatus" role="status">Automatisch gespeichert</div>
         <a class="nav-link" href="index.html">Durchlauf 1</a>
         <a class="nav-link" href="durchlauf-2.html">Durchlauf 2</a>
-        <a class="nav-link" href="lueckendiktat.html">Lückendiktat</a>
+        <a class="nav-link" href="woerter-quiz.html">Wörterquiz</a>
         <a class="nav-link" href="uebersicht.html">Übersicht</a>
       </div>
     </header>
 
     <main id="main">
       <section class="quiz-heading" aria-labelledby="quiz-title">
-        <p class="eyebrow">Wörterquiz</p>
-        <h1 id="quiz-title">Les adjectifs</h1>
-        <p>Choisis le bon mot.</p>
+        <p class="eyebrow">Wörterquiz · Lückendiktat</p>
+        <h1 id="quiz-title">Le mot manquant</h1>
+        <p>Complète chaque phrase avec un mot de la liste.</p>
+        <div class="dictation-word-list" aria-label="Mots à utiliser">
+          <strong>Mots :</strong>
+          <span>bavard · beau · belle · bonne · gentil · gentille · paresseux · sérieuse · sportif · timide</span>
+        </div>
         <div class="quiz-progress" aria-label="Fortschritt">
           <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
           <strong id="progressLabel">0 von 10 geprüft</strong>
         </div>
       </section>
 
-      <section class="quiz-grid" id="quizGrid" aria-label="Questions"></section>
+      <section class="quiz-grid" id="quizGrid" aria-label="Phrases à compléter"></section>
 
       <div class="quiz-footer">
         <p id="quizResult" role="status" aria-live="polite"></p>
@@ -56,6 +61,6 @@
       </div>
     </main>
 
-    <script src="woerter-quiz.js?v=20260927-quiz"></script>
+    <script src="lueckendiktat.js?v=20260927-dictee"></script>
   </body>
 </html>
