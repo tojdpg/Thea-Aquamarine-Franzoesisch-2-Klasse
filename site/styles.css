@@ -664,7 +664,7 @@ textarea:focus {
   padding-left: 1.2rem;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 1050px) {
   .topbar {
     align-items: flex-start;
     flex-direction: column;
@@ -674,7 +674,9 @@ textarea:focus {
     flex-wrap: wrap;
     width: 100%;
   }
+}
 
+@media (max-width: 780px) {
   .score-pill,
   .save-status,
   .nav-link {

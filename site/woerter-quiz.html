@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thea Aquamarine - Quiz des adjectifs</title>
+    <meta name="description" content="Französisches Wörterquiz für Thea mit zehn Adjektiven.">
+    <meta name="theme-color" content="#128283">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Thea Français">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" sizes="180x180">
+    <link rel="stylesheet" href="styles.css?v=20260927-quiz">
+    <link rel="stylesheet" href="woerter-quiz.css?v=20260927-quiz">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Aller au quiz</a>
+    <header class="topbar">
+      <div class="brand">
+        <img src="assets/aquamarine-shell.svg" width="56" height="56" alt="Muschel mit französischem Heft">
+        <div>
+          <p class="eyebrow">Judith Kerr Grundschule · Thea</p>
+          <p class="brand-title">Mission de français</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="score-pill" aria-live="polite">
+          <span>Score</span>
+          <strong><span id="score">0</span>/10</strong>
+        </div>
+        <div class="save-status" id="saveStatus" role="status">Automatisch gespeichert</div>
+        <a class="nav-link" href="index.html">Durchlauf 1</a>
+        <a class="nav-link" href="durchlauf-2.html">Durchlauf 2</a>
+        <a class="nav-link" href="uebersicht.html">Übersicht</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="quiz-heading" aria-labelledby="quiz-title">
+        <p class="eyebrow">Wörterquiz</p>
+        <h1 id="quiz-title">Les adjectifs</h1>
+        <p>Choisis le bon mot.</p>
+        <div class="quiz-progress" aria-label="Fortschritt">
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          <strong id="progressLabel">0 von 10 geprüft</strong>
+        </div>
+      </section>
+
+      <section class="quiz-grid" id="quizGrid" aria-label="Questions"></section>
+
+      <div class="quiz-footer">
+        <p id="quizResult" role="status" aria-live="polite"></p>
+        <button class="nav-link quiz-restart" id="restartBtn" type="button">Neuer Versuch</button>
+      </div>
+    </main>
+
+    <script src="woerter-quiz.js?v=20260927-quiz"></script>
+  </body>
+</html>
