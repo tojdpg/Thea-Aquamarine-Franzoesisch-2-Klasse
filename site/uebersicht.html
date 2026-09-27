@@ -3,12 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Thea Aquamarine - Übersicht</title>
+    <title>Thea Aquamarine - Französisch</title>
+    <meta name="description" content="Theas Französisch-Aufgaben und ihre bisherigen Ergebnisse.">
     <meta name="theme-color" content="#128283">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Thea Français">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="assets/icons/favicon-32.png?v=20260531-icon" type="image/png" sizes="32x32">
     <link rel="icon" href="assets/icons/thea-icon-192.png?v=20260531-icon" type="image/png" sizes="192x192">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=20260531-icon" sizes="180x180">
-    <link rel="stylesheet" href="styles.css?v=20260927-quiz">
+    <link rel="stylesheet" href="styles.css?v=20260927-home">
+    <link rel="stylesheet" href="startseite.css?v=20260927-home">
   </head>
   <body>
     <header class="topbar">
@@ -16,28 +21,32 @@
         <img src="assets/aquamarine-shell.svg" width="56" height="56" alt="Muschel mit französischem Heft">
         <div>
           <p class="eyebrow">Thea Aquamarine · 2c</p>
-          <p class="brand-title">Übersicht</p>
+          <p class="brand-title">Theas Französisch</p>
         </div>
-      </div>
-      <div class="top-actions">
-        <a class="nav-link" href="index.html">Durchlauf 1</a>
-        <a class="nav-link top-pdf-run-button" href="durchlauf-2.html">Durchlauf 2</a>
-        <a class="nav-link" href="woerter-quiz.html">Wörterquiz</a>
-        <a class="nav-link" href="lueckendiktat.html">Lückendiktat</a>
       </div>
     </header>
 
     <main>
-      <section class="overview-card">
+      <section class="overview-home" aria-labelledby="home-title">
         <p class="eyebrow">Fortschritt</p>
-        <h1>Was Thea schon gemacht hat</h1>
-        <p>Diese Übersicht wird automatisch auf diesem Gerät gespeichert.</p>
+        <h1 id="home-title">Theas Französisch</h1>
         <div class="summary-grid" id="summaryGrid"></div>
       </section>
 
-      <section class="history-list" id="historyList"></section>
+      <section class="quiz-section" aria-labelledby="quiz-title">
+        <h2 id="quiz-title">Aufgaben</h2>
+        <div class="quiz-list" id="quizList"></div>
+      </section>
+
+      <section class="runs-section" id="durchgaenge" aria-labelledby="runs-title">
+        <div class="runs-heading">
+          <h2 id="runs-title">Bisherige Durchgänge</h2>
+          <p>Gespeichert in diesem Browser unter dieser Adresse.</p>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </section>
     </main>
 
-    <script src="overview.js?v=20260601-round2"></script>
+    <script src="overview.js?v=20260927-home"></script>
   </body>
 </html>

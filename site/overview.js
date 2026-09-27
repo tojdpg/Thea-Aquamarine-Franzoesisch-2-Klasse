@@ -3,6 +3,34 @@ const STORAGE_KEY = "thea-french-2c-progress-v1";
 const ROUND2_STORAGE_KEY = "thea-french-2c-round2-progress-v1";
 const historyList = document.querySelector("#historyList");
 const summaryGrid = document.querySelector("#summaryGrid");
+const quizList = document.querySelector("#quizList");
+
+const QUIZZES = [
+  {
+    title: "Durchlauf 1",
+    description: "Wörter, Farben und erste Sätze",
+    href: "durchlauf-1.html",
+    historyTitle: "Thea Aquamarine - Mission de français"
+  },
+  {
+    title: "Durchlauf 2",
+    description: "Neue Wörter und kleine Texte",
+    href: "durchlauf-2.html",
+    historyTitle: "Thea Aquamarine - Mission de français 2"
+  },
+  {
+    title: "Wörterquiz",
+    description: "Les adjectifs",
+    href: "woerter-quiz.html",
+    historyTitle: "Wörterquiz: Les adjectifs"
+  },
+  {
+    title: "Lückendiktat",
+    description: "Le mot manquant",
+    href: "lueckendiktat.html",
+    historyTitle: "Lückendiktat: Le mot manquant"
+  }
+];
 
 const MISSIONS = [
   { id: "bonjour", title: "Bonjour !", start: 0, end: 4 },
@@ -296,6 +324,31 @@ function renderSummary(history) {
   `;
 }
 
+function renderQuizList(history) {
+  quizList.innerHTML = QUIZZES.map((quiz) => {
+    const runs = history.filter((entry) => entry.title === quiz.historyTitle);
+    const latest = runs[0];
+    const score = latest ? `${latest.score}/${latest.total}` : "Starten";
+    const detail = latest
+      ? `${runs.length} ${runs.length === 1 ? "Durchgang" : "Durchgänge"}`
+      : "Noch offen";
+
+    return `
+      <a class="quiz-entry" href="${quiz.href}">
+        <span class="quiz-entry-copy">
+          <strong>${quiz.title}</strong>
+          <small>${quiz.description}</small>
+        </span>
+        <span class="quiz-entry-progress">
+          <strong>${score}</strong>
+          <small>${detail}</small>
+        </span>
+        <span class="quiz-entry-arrow" aria-hidden="true">→</span>
+      </a>
+    `;
+  }).join("");
+}
+
 function renderHistory(history) {
   if (history.length === 0) {
     const diagnostic = storageDiagnostic();
@@ -305,7 +358,7 @@ function renderHistory(history) {
 
     historyList.innerHTML = `
       <section class="empty-state">
-        <h1>Noch kein gespeicherter Durchgang</h1>
+        <h2>Noch kein gespeicherter Durchgang</h2>
         <p>${storageText}</p>
         <div class="storage-diagnostic">
           <p><strong>Geprüfte Adresse:</strong> ${htmlEscape(diagnostic.origin)}</p>
@@ -390,4 +443,5 @@ function renderHistory(history) {
 
 const history = mergeProgressIntoHistory(loadHistory());
 renderSummary(history);
+renderQuizList(history);
 renderHistory(history);
