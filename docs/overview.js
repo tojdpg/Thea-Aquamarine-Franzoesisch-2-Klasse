@@ -7,6 +7,18 @@ const quizList = document.querySelector("#quizList");
 
 const QUIZZES = [
   {
+    title: "Lückendiktat",
+    description: "Le mot manquant",
+    href: "lueckendiktat.html",
+    historyTitle: "Lückendiktat: Le mot manquant"
+  },
+  {
+    title: "Wörterquiz",
+    description: "Les adjectifs",
+    href: "woerter-quiz.html",
+    historyTitle: "Wörterquiz: Les adjectifs"
+  },
+  {
     title: "Durchlauf 1",
     description: "Wörter, Farben und erste Sätze",
     href: "durchlauf-1.html",
@@ -17,18 +29,6 @@ const QUIZZES = [
     description: "Neue Wörter und kleine Texte",
     href: "durchlauf-2.html",
     historyTitle: "Thea Aquamarine - Mission de français 2"
-  },
-  {
-    title: "Wörterquiz",
-    description: "Les adjectifs",
-    href: "woerter-quiz.html",
-    historyTitle: "Wörterquiz: Les adjectifs"
-  },
-  {
-    title: "Lückendiktat",
-    description: "Le mot manquant",
-    href: "lueckendiktat.html",
-    historyTitle: "Lückendiktat: Le mot manquant"
   }
 ];
 
