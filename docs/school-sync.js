@@ -22,7 +22,7 @@
   const assetBase = new URL("./", loader.src);
   const style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = new URL("school-sync.css?v=20261004-conflictbackup1", assetBase).href;
+  style.href = new URL("school-sync.css?v=20261005-devicebackup1", assetBase).href;
   document.head.append(style);
 
   function readMeta(key, fallback = null) {
@@ -219,11 +219,13 @@
       </section>
       <section class="school-sync-local" data-sync-local>
         <button class="school-sync-primary" type="button" data-sync-start>Dieses Gerät sichern und verbinden</button>
+        <button class="school-sync-secondary school-sync-device-backup" type="button" data-sync-device-backup>Stand dieses Geräts als JSON herunterladen</button>
         <div class="school-sync-divider"><span>oder anderes Gerät verbinden</span></div>
         <label for="school-sync-pair-code">Pairing-Code vom verbundenen Gerät</label>
         <div class="school-sync-code-input"><input id="school-sync-pair-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="9" placeholder="1234-5678"><button class="school-sync-secondary" type="button" data-sync-pair>Verbinden</button></div>
       </section>
       <section class="school-sync-connected" data-sync-connected hidden>
+        <button class="school-sync-secondary school-sync-device-backup" type="button" data-sync-device-backup>Stand dieses Geräts als JSON herunterladen</button>
         <div class="school-sync-actions"><button class="school-sync-primary" type="button" data-sync-new-code>Anderes Gerät verbinden</button><button class="school-sync-secondary" type="button" data-sync-now>Jetzt synchronisieren</button></div>
       </section>
       <section class="school-sync-code" data-sync-code-region hidden>
@@ -239,6 +241,7 @@
     dialog.querySelector("[data-sync-new-code]").addEventListener("click", makePairCode);
     dialog.querySelector("[data-sync-now]").addEventListener("click", () => syncFromRemote(false));
     dialog.querySelector("[data-sync-backup]").addEventListener("click", downloadConflictBackup);
+    dialog.querySelectorAll("[data-sync-device-backup]").forEach((button) => button.addEventListener("click", downloadDeviceBackup));
     dialog.querySelector("[data-sync-choose-remote]").addEventListener("click", () => resolveConflict("remote"));
     dialog.querySelector("[data-sync-choose-local]").addEventListener("click", () => resolveConflict("local"));
     dialog.querySelector("#school-sync-pair-code").addEventListener("input", (event) => {
@@ -301,6 +304,25 @@
     link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 30000);
     document.querySelector("[data-sync-backup-status]").textContent = "Sicherung erstellt. Beide Stände sind unverändert.";
+  }
+
+  function downloadDeviceBackup() {
+    const payload = {
+      student: profile,
+      savedAt: new Date().toISOString(),
+      source: "Dieses Gerät, ohne Synchronisierung",
+      answers: collectState()
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${profile}-lernstand-geraet-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    showMessage("Gerätestand heruntergeladen. Es wurde nichts synchronisiert.");
   }
 
   function saveBackupDownload(which, state) {
