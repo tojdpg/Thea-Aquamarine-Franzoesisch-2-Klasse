@@ -38,11 +38,14 @@
 }
 
 .school-sync-dialog {
+  box-sizing: border-box;
   width: min(520px, calc(100vw - 28px));
-  max-width: none;
+  max-width: calc(100vw - 28px);
+  max-height: calc(100vh - 24px);
   max-height: min(88dvh, 760px);
   padding: 24px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   border: 1px solid #d5e0e7;
   border-radius: 12px;
   color: #1c2732;
@@ -238,6 +241,11 @@
 .school-sync-conflict p {
   margin: 0 0 12px;
   color: #594a2d;
+}
+
+.school-sync-conflict .school-sync-backup {
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .school-sync-footnote {

@@ -22,7 +22,7 @@
   const assetBase = new URL("./", loader.src);
   const style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = new URL("school-sync.css", assetBase).href;
+  style.href = new URL("school-sync.css?v=20261004-conflictbackup1", assetBase).href;
   document.head.append(style);
 
   function readMeta(key, fallback = null) {
@@ -210,6 +210,13 @@
       <p class="school-sync-copy">Die Antworten bleiben auf diesem Gerät gespeichert. Mit einem einmaligen Code kannst du sie zusätzlich auf dem privaten Tokenwerk-Server sichern und auf einem anderen Gerät fortsetzen.</p>
       <p class="school-sync-status" data-sync-status role="status">Nur auf diesem Gerät gespeichert</p>
       <p class="school-sync-message" data-sync-message aria-live="polite"></p>
+      <section class="school-sync-conflict" data-sync-conflict hidden>
+        <p>Es gibt unterschiedliche Antworten auf dem Gerät und dem VPS. Die Auswahl kann einen ganzen Aufgabenblock betreffen. Lade zuerst beide Stände herunter; das verändert oder synchronisiert nichts.</p>
+        <button class="school-sync-secondary school-sync-backup" type="button" data-sync-backup>Beide Stände als JSON sichern</button>
+        <small data-sync-backup-status aria-live="polite"></small>
+        <div class="school-sync-actions"><button class="school-sync-secondary" type="button" data-sync-choose-remote>VPS-Antworten bevorzugen</button><button class="school-sync-primary" type="button" data-sync-choose-local>Dieses Gerät bevorzugen</button></div>
+        <small>Erst nach der Sicherung auswählen. Die jeweils andere Version wird vor der Übernahme zusätzlich gespeichert.</small>
+      </section>
       <section class="school-sync-local" data-sync-local>
         <button class="school-sync-primary" type="button" data-sync-start>Dieses Gerät sichern und verbinden</button>
         <div class="school-sync-divider"><span>oder anderes Gerät verbinden</span></div>
@@ -224,11 +231,6 @@
         <strong data-sync-code></strong>
         <small data-sync-code-note></small>
       </section>
-      <section class="school-sync-conflict" data-sync-conflict hidden>
-        <p>Dieselbe Aufgabe wurde auf beiden Geräten verändert. Beide Speicherstände bleiben erhalten. Wähle, welche Antworten bei doppelten Aufgaben gelten sollen; einzelne Aufgaben werden zusammengeführt.</p>
-        <div class="school-sync-actions"><button class="school-sync-secondary" type="button" data-sync-choose-remote>VPS-Antworten bevorzugen</button><button class="school-sync-primary" type="button" data-sync-choose-local>Dieses Gerät bevorzugen</button></div>
-        <small>Vor der Übernahme wird die jeweils andere Version als JSON-Datei heruntergeladen.</small>
-      </section>
       <p class="school-sync-footnote">Der Server akzeptiert nur Speicherstände dieser Schülerin. Mila und Thea sind getrennt; Grok und GitHub erhalten keine Antworten.</p>`;
     document.body.append(dialog);
     dialog.querySelector("[data-sync-close]").addEventListener("click", () => dialog.close());
@@ -236,6 +238,7 @@
     dialog.querySelector("[data-sync-pair]").addEventListener("click", pairDevice);
     dialog.querySelector("[data-sync-new-code]").addEventListener("click", makePairCode);
     dialog.querySelector("[data-sync-now]").addEventListener("click", () => syncFromRemote(false));
+    dialog.querySelector("[data-sync-backup]").addEventListener("click", downloadConflictBackup);
     dialog.querySelector("[data-sync-choose-remote]").addEventListener("click", () => resolveConflict("remote"));
     dialog.querySelector("[data-sync-choose-local]").addEventListener("click", () => resolveConflict("local"));
     dialog.querySelector("#school-sync-pair-code").addEventListener("input", (event) => {
@@ -249,9 +252,13 @@
     const connected = Boolean(readToken());
     document.querySelector("[data-sync-local]").hidden = connected;
     document.querySelector("[data-sync-connected]").hidden = !connected;
+    const pending = pendingConflict || readMeta(pendingKey);
+    document.querySelector(".school-sync-copy").hidden = Boolean(pending);
+    document.querySelector("[data-sync-status]").hidden = Boolean(pending);
+    document.querySelector("[data-sync-message]").hidden = Boolean(pending);
+    document.querySelector(".school-sync-footnote").hidden = Boolean(pending);
     if (connected) setStatus("Gerät ist mit dem VPS verknüpft", true);
     else setStatus("Nur auf diesem Gerät gespeichert", false);
-    const pending = pendingConflict || readMeta(pendingKey);
     if (pending) showConflict(pending, false);
   }
 
@@ -259,9 +266,41 @@
     pendingConflict = conflict;
     bootBlocked = blockBoot || bootBlocked;
     writeMeta(pendingKey, conflict);
+    document.querySelector(".school-sync-copy").hidden = true;
+    document.querySelector("[data-sync-status]").hidden = true;
+    document.querySelector("[data-sync-message]").hidden = true;
+    document.querySelector(".school-sync-footnote").hidden = true;
+    document.querySelector("[data-sync-local]").hidden = true;
+    document.querySelector("[data-sync-connected]").hidden = true;
+    document.querySelector("[data-sync-code-region]").hidden = true;
     document.querySelector("[data-sync-conflict]").hidden = false;
-    showMessage("Es gibt zwei Versionen für einzelne Aufgaben. Nichts wird automatisch überschrieben.", true);
     openDialog();
+  }
+
+  function downloadConflictBackup() {
+    const conflict = pendingConflict || readMeta(pendingKey);
+    if (!conflict) return;
+    const payload = {
+      student: profile,
+      savedAt: new Date().toISOString(),
+      note: "Lokale Sicherung. Der Konflikt wurde nicht aufgelöst und keine Antwort synchronisiert.",
+      deviceAtConflict: conflict.local || collectState(),
+      deviceNow: collectState(),
+      vps: conflict.remote || {},
+      baseline: conflict.baseline || {},
+      revision: conflict.revision ?? null,
+      conflictingKeys: conflict.keys || []
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${profile}-lernstand-konflikt-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    document.querySelector("[data-sync-backup-status]").textContent = "Sicherung erstellt. Beide Stände sind unverändert.";
   }
 
   function saveBackupDownload(which, state) {
@@ -279,7 +318,7 @@
     document.body.append(link);
     link.click();
     link.remove();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
   }
 
   async function resolveConflict(preference) {
@@ -308,6 +347,7 @@
       localStorage.removeItem(pendingKey);
       pendingConflict = null;
       document.querySelector("[data-sync-conflict]").hidden = true;
+      renderConnectedControls();
       setStatus("Gesichert · beide Geräte verbunden", true);
       showMessage("Fertig. Die andere Version wurde ebenfalls als JSON-Datei gesichert.");
       if (bootBlocked) {
